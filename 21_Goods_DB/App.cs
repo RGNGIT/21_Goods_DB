@@ -4,15 +4,17 @@ namespace _21_Goods_DB
     {
         public App()
         {
+            // Ничего интересного, запуск проги и обновление первого грида со справками
             InitializeComponent();
             DirGridUpdater();
         }
-
+        // Твоя строка подключения, сейчас здесь моя, надо будет поменять
         string connection = "Server=AORUS;Integrated Security=true;";
-
+        // Добавление элемента в справочник
         private void buttonAddDir_Click(object sender, EventArgs e)
         {
             DatabaseWorks db = new(connection);
+            // В зависимости от того, на какой странице справочника находимся, добавляем. Данные берем из текстбоксов 
             switch (tabControlDirs.SelectedIndex)
             {
                 case 0: db.AddStreetType(textBoxStreetType.Text); break;
@@ -28,6 +30,7 @@ namespace _21_Goods_DB
         void GoodGridUpdater()
         {
             DatabaseWorks db = new(connection);
+            // Обновлятор таблицы с товарами
             dataGridViewGoods.DataSource = db.ReturnTable("a.name as Наименование, a.amount as Количество", "Goods.dbo.Good as a", null!);
             db.connection.Close();
         }
@@ -35,6 +38,7 @@ namespace _21_Goods_DB
         void DirGridUpdater()
         {
             DatabaseWorks db = new(connection);
+            // Обновлятор таблицы со справочниками
             switch (tabControlDirs.SelectedIndex)
             {
                 case 0: dataGridViewDir.DataSource = db.ReturnTable("a.name AS Наименование", "Goods.dbo.StreetType AS a", null!); break;
@@ -46,8 +50,22 @@ namespace _21_Goods_DB
             db.connection.Close();
         }
 
+        void OrgAddressComboUpdater()
+        {
+            DatabaseWorks db = new(connection);
+            comboBoxOrgAddress.Items.Clear();
+            // Снова скучные обновляторы. Вобщем этот и подобные заполняют либо комбо боксы, либо таблицы данными из бд
+            dataGridViewBuffer.DataSource = db.ReturnTable("a.id, c.name as lname, b.name as sname, a.houseNumber, a.campus", "Goods.dbo.Address as a, Goods.dbo.Street as b, Goods.dbo.Locality as c", "WHERE a.streetId = b.id AND a.localityId = c.id");
+            for (int i = 0; i < dataGridViewBuffer.Rows.Count - 1; i++)
+            {
+                comboBoxOrgAddress.Items.Add($"{dataGridViewBuffer.Rows[i].Cells[0].Value} {dataGridViewBuffer.Rows[i].Cells[1].Value}, ул. {dataGridViewBuffer.Rows[i].Cells[2].Value}, д. {dataGridViewBuffer.Rows[i].Cells[3].Value}, корпус {dataGridViewBuffer.Rows[i].Cells[4].Value}");
+            }
+            db.connection.Close();
+        }
+
         private void tabControlMain_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Автоматическая менюшка, которая делает что-то в зависимости от того, на какой мы вкладке
             switch (tabControlMain.SelectedIndex)
             {
                 case 0:
@@ -56,9 +74,21 @@ namespace _21_Goods_DB
                 case 1:
                     GoodGridUpdater();
                     break;
+                case 2:
+                    OrgAddressComboUpdater();
+                    PriceListOrgComboUpdater();
+                    PriceListGoodsComboUpdater();
+                    OrgGridUpdater();
+                    break;
+                case 3:
+                    PhysGridUpdater();
+                    break;
+                case 4:
+                    UpdateOrderGoodCombo();
+                    break;
             }
         }
-
+        // Обновлятор
         void StreetTypeComboUpdater()
         {
             DatabaseWorks db = new(connection);
@@ -70,7 +100,7 @@ namespace _21_Goods_DB
             }
             db.connection.Close();
         }
-
+        // Обновлятор
         void LocalityTypeComboUpdater()
         {
             DatabaseWorks db = new(connection);
@@ -82,7 +112,7 @@ namespace _21_Goods_DB
             }
             db.connection.Close();
         }
-
+        // Обновлятор
         void StreetComboUpdater()
         {
             DatabaseWorks db = new(connection);
@@ -94,7 +124,7 @@ namespace _21_Goods_DB
             }
             db.connection.Close();
         }
-
+        // Обновлятор
         void LocalityComboUpdater()
         {
             DatabaseWorks db = new(connection);
@@ -106,9 +136,50 @@ namespace _21_Goods_DB
             }
             db.connection.Close();
         }
+        // Обновлятор
+        void OrgGridUpdater()
+        {
+            DatabaseWorks db = new(connection);
+            switch (tabControlOrg.SelectedIndex)
+            {
+                case 0:
+                    dataGridViewOrg.DataSource = db.ReturnTable("name as Наименование, inn as ИНН, req as Реквизиты, phone as Телефон, email as Эмейл, site as Сайт, predName as 'Имя представителя', predSurname as 'Фамилия представителя'", "Goods.dbo.Organization", null!);
+                    break;
+                case 1:
+                    dataGridViewOrg.DataSource = db.ReturnTable("c.name as 'Название товара', b.dateReleased as 'Дата выпуска', b.goodDesc as Описание, b.goodPrice as Стоимость", "Goods.dbo.PriceList_Organization as a, Goods.dbo.PriceList as b, Goods.dbo.Good as c", $"WHERE a.organizationId = '{comboBoxPriceListOrg.Text.Split(' ')[0]}' AND b.id = a.priceListId AND b.goodId = c.id");
+                    dataGridViewBuffer.DataSource = db.ReturnTable("a.id", "Goods.dbo.PriceList as a", null!);
+                    break;
+            }
+            db.connection.Close();
+        }
+        // Обновлятор
+        void PriceListOrgComboUpdater()
+        {
+            comboBoxPriceListOrg.Items.Clear();
+            DatabaseWorks db = new(connection);
+            dataGridViewBuffer.DataSource = db.ReturnTable("*", "Goods.dbo.Organization", null!);
+            for (int i = 0; i < dataGridViewBuffer.Rows.Count - 1; i++)
+            {
+                comboBoxPriceListOrg.Items.Add($"{dataGridViewBuffer.Rows[i].Cells[0].Value} {dataGridViewBuffer.Rows[i].Cells[1].Value}. Реквизиты: {dataGridViewBuffer.Rows[i].Cells[9].Value}");
+            }
+            db.connection.Close();
+        }
+        // Обновлятор
+        void PriceListGoodsComboUpdater()
+        {
+            comboBoxPriceListGood.Items.Clear();
+            DatabaseWorks db = new(connection);
+            dataGridViewBuffer.DataSource = db.ReturnTable("*", "Goods.dbo.Good", null!);
+            for (int i = 0; i < dataGridViewBuffer.Rows.Count - 1; i++)
+            {
+                comboBoxPriceListGood.Items.Add($"{dataGridViewBuffer.Rows[i].Cells[0].Value} {dataGridViewBuffer.Rows[i].Cells[1].Value}");
+            }
+            db.connection.Close();
+        }
 
         private void tabControlDirs_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Снова автоменюшка, только теперь подвкладок справочников
             DirGridUpdater();
             switch (tabControlDirs.SelectedIndex)
             {
@@ -128,6 +199,7 @@ namespace _21_Goods_DB
         private void buttonAddGood_Click(object sender, EventArgs e)
         {
             DatabaseWorks db = new(connection);
+            // Добавить товар
             db.AddGood(textBoxGoodName.Text, textBoxGoodAmount.Text);
             GoodGridUpdater();
             db.connection.Close();
@@ -135,7 +207,138 @@ namespace _21_Goods_DB
 
         private void buttonAddOrg_Click(object sender, EventArgs e)
         {
+            DatabaseWorks db = new(connection);
+            switch (tabControlOrg.SelectedIndex)
+            {
+                // Добавить организацию
+                case 0:
+                    string[] FIO = textBoxOrgFIO.Text.Split(' ');
+                    db.AddOrganization(textBoxOrgName.Text, textBoxOrgInn.Text, textBoxOrgPhone.Text, textBoxOrgEmail.Text, textBoxOrgSite.Text, FIO[1], FIO[0], FIO[2], comboBoxOrgAddress.Text.Split(' ')[0], textBoxOrgReq.Text);
+                    break;
+                // Добавить прайслист
+                case 1:
+                    db.AddPriceListItem(comboBoxPriceListOrg.Text.Split(' ')[comboBoxPriceListOrg.Text.Split(' ').Length - 1], dateTimePickerPriceListDate.Value.ToString("dd/MM/yyyy"), textBoxPriceListDesc.Text, textBoxPriceListValue.Text, comboBoxPriceListGood.Text.Split(' ')[0]);
+                    int itemId = dataGridViewBuffer.Rows.Count > 1 ? int.Parse(dataGridViewBuffer.Rows[dataGridViewBuffer.Rows.Count - 2].Cells[0].Value.ToString()!) + 1 : -1;
+                    db.ConnectItemOrg(itemId.ToString(), comboBoxPriceListOrg.Text.Split(' ')[0]);
+                    break;
+            }
+            OrgGridUpdater();
+            db.connection.Close();
+        }
+        // Вызов обновляторов
+        private void tabControlOrg_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            OrgAddressComboUpdater();
+            PriceListOrgComboUpdater();
+            PriceListGoodsComboUpdater();
+            OrgGridUpdater();
+        }
 
+        private void comboBoxPriceListOrg_SelectedValueChanged(object sender, EventArgs e)
+        {
+            OrgGridUpdater();
+        }
+        // Обновлятор
+        void PhysGridUpdater()
+        {
+            DatabaseWorks db = new(connection);
+            switch (tabControlPhys.SelectedIndex)
+            {
+                case 0:
+                    dataGridViewPhys.DataSource = db.ReturnTable("a.series as Серия, a.number as Номер, a.dateIssued as 'Дата выдачи', a.issuerName as 'Кто выпустил'", "Goods.dbo.Passport as a", null!);
+                    break;
+                case 1:
+                    PhysPassportComboUpdater();
+                    dataGridViewPhys.DataSource = db.ReturnTable("a.name as Имя, a.surname as Фамилия, a.patron as Отчество, a.inn as ИНН, b.series as Серия, b.number as Номер", "Goods.dbo.Phys as a, Goods.dbo.Passport as b", null!);
+                    break;
+            }
+            db.connection.Close();
+        }
+        // Обновлятор
+        void PhysPassportComboUpdater()
+        {
+            DatabaseWorks db = new(connection);
+            comboBoxPhysPassport.Items.Clear();
+            dataGridViewBuffer.DataSource = db.ReturnTable("*", "Goods.dbo.Passport", null!);
+            for (int i = 0; i < dataGridViewBuffer.Rows.Count - 1; i++)
+            {
+                comboBoxPhysPassport.Items.Add($"{dataGridViewBuffer.Rows[i].Cells[0].Value} Серия: {dataGridViewBuffer.Rows[i].Cells[1].Value}. Номер: {dataGridViewBuffer.Rows[i].Cells[2].Value}");
+            }
+            db.connection.Close();
+        }
+        // Обновлятор
+        void UpdateOrderWhoCombo(int type)
+        {
+            DatabaseWorks db = new(connection);
+            comboBoxOrderWho.Items.Clear();
+            switch (type)
+            {
+                case 0:
+                    dataGridViewBuffer.DataSource = db.ReturnTable("a.id, a.surname, a.name, a.name", "Goods.dbo.Phys as a", null!);
+                    for (int i = 0; i < dataGridViewBuffer.Rows.Count - 1; i++)
+                    {
+                        comboBoxOrderWho.Items.Add($"{dataGridViewBuffer.Rows[i].Cells[0].Value} {dataGridViewBuffer.Rows[i].Cells[1].Value} {dataGridViewBuffer.Rows[i].Cells[2].Value} {dataGridViewBuffer.Rows[i].Cells[3].Value}");
+                    }
+                    break;
+                case 1:
+                    dataGridViewBuffer.DataSource = db.ReturnTable("a.id, a.name", "Goods.dbo.Organization as a", null!);
+                    for (int i = 0; i < dataGridViewBuffer.Rows.Count - 1; i++)
+                    {
+                        comboBoxOrderWho.Items.Add($"{dataGridViewBuffer.Rows[i].Cells[0].Value} {dataGridViewBuffer.Rows[i].Cells[1].Value}");
+                    }
+                    break;
+            }
+            db.connection.Close();
+        }
+        // Обновлятор
+        void UpdateOrderGoodCombo()
+        {
+            DatabaseWorks db = new(connection);
+            comboBoxOrderGood.Items.Clear();
+            dataGridViewBuffer.DataSource = db.ReturnTable(
+                "a.id, a.name as gname, d.name as orgname, c.goodPrice",
+                "Goods.dbo.Good as a, Goods.dbo.PriceList_Organization as b, Goods.dbo.PriceList as c, Goods.dbo.Organization as d",
+                "WHERE a.id = c.goodId AND b.priceListId = c.id AND b.organizationId = d.id"
+            );
+            for (int i = 0; i < dataGridViewBuffer.Rows.Count - 1; i++)
+            {
+                comboBoxOrderGood.Items.Add($"{dataGridViewBuffer.Rows[i].Cells[0].Value} {dataGridViewBuffer.Rows[i].Cells[1].Value}. Предлагает \"{dataGridViewBuffer.Rows[i].Cells[2].Value}\" за {dataGridViewBuffer.Rows[i].Cells[3].Value}p.");
+            }
+            db.connection.Close();
+        }
+
+        private void buttonAddPhys_Click(object sender, EventArgs e)
+        {
+            DatabaseWorks db = new(connection);
+            switch (tabControlPhys.SelectedIndex)
+            {
+                // Добавить паспорт
+                case 0:
+                    db.AddPassport(textBoxPassportSeries.Text, textBoxPassportNumber.Text, dateTimePickerPassportIssue.Value.ToString("dd/MM/yyyy"), textBoxPassportWhoIssued.Text);
+                    break;
+                case 1:
+                    // Добавить физлицо
+                    string[] FIO = textBoxPhysFIO.Text.Split(' ');
+                    db.AddPhys(FIO[1], FIO[0], FIO[2], textBoxPhysINN.Text, comboBoxPhysPassport.Text.Split(' ')[0]);
+                    break;
+            }
+            PhysGridUpdater();
+            db.connection.Close();
+        }
+        // Вызов обновлятора
+        private void tabControlPhys_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PhysGridUpdater();
+        }
+
+        private void buttonAddOrder_Click(object sender, EventArgs e)
+        {
+
+        }
+        // Вызов обновлятора
+        private void comboBoxOrderWhoType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateOrderWhoCombo(comboBoxOrderWhoType.SelectedIndex);
         }
     }
 }

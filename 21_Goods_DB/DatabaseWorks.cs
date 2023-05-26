@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
 
 namespace _21_Goods_DB
 {
@@ -92,6 +93,71 @@ namespace _21_Goods_DB
             try
             {
                 SqlCommand command = new SqlCommand($"INSERT INTO Goods.dbo.Good (name, amount) VALUES ('{Name}', '{Amount}');", connection);
+                return $"Команда выполнена. Задействовано строк таблицы: {command.ExecuteNonQuery()}";
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+        }
+
+        public string AddOrganization(string Name, string Inn, string Phone, string Email, string Site, string PName, string PSurname, string PPatron, string AddressId, string OrgReq)
+        {
+            try
+            {
+                SqlCommand command = new SqlCommand($"INSERT INTO Goods.dbo.Organization (name, inn, phone, email, site, predName, predSurname, predPatron, addressId, req) VALUES ('{Name}', '{Inn}', '{Phone}', '{Email}', '{Site}', '{PName}', '{PSurname}', '{PPatron}', '{AddressId}', '{OrgReq}');", connection);
+                return $"Команда выполнена. Задействовано строк таблицы: {command.ExecuteNonQuery()}";
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+        }
+
+        public string AddPriceListItem(string Req, string DateReleased, string GoodDesc, string GoodPrice, string GoodId)
+        {
+            try
+            {
+                SqlCommand command = new SqlCommand($"INSERT INTO Goods.dbo.PriceList (req, dateReleased, goodDesc, goodPrice, goodId) VALUES ('{Req}', '{DateReleased}', '{GoodDesc}', '{GoodPrice}', '{GoodId}');", connection);
+                return $"Команда выполнена. Задействовано строк таблицы: {command.ExecuteNonQuery()}";
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+        }
+
+        public string ConnectItemOrg(string PriceListId, string OrgId)
+        {
+            try
+            {
+                SqlCommand command = new SqlCommand($"INSERT INTO Goods.dbo.PriceList_Organization (priceListId, organizationId) VALUES ('{PriceListId}', '{OrgId}');", connection);
+                return $"Команда выполнена. Задействовано строк таблицы: {command.ExecuteNonQuery()}";
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+        }
+
+        public string AddPassport(string Series, string Number, string DateIssued, string IssuerName)
+        {
+            try
+            {
+                SqlCommand command = new SqlCommand($"INSERT INTO Goods.dbo.Passport (series, number, dateIssued, issuerName) VALUES ('{Series}', '{Number}', '{DateIssued}', '{IssuerName}');", connection);
+                return $"Команда выполнена. Задействовано строк таблицы: {command.ExecuteNonQuery()}";
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+        }
+
+        public string AddPhys(string Name, string Surname, string Patron, string Inn, string PassportId)
+        {
+            try
+            {
+                SqlCommand command = new SqlCommand($"INSERT INTO Goods.dbo.Phys (inn, name, surname, patron, passportId) VALUES ('{Inn}', '{Name}', '{Surname}', '{Patron}', '{PassportId}');", connection);
                 return $"Команда выполнена. Задействовано строк таблицы: {command.ExecuteNonQuery()}";
             }
             catch (Exception e)
