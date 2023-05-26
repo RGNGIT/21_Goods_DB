@@ -166,5 +166,18 @@ namespace _21_Goods_DB
             }
         }
 
+        public string Delete(string Id, string Table)
+        {
+            try
+            {
+                SqlCommand command = new SqlCommand($"DELETE FROM {Table} WHERE {Table}.id = {Id};", connection);
+                return $"Команда выполнена. Задействовано строк таблицы: {command.ExecuteNonQuery()}";
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+        }
+
     }
 }

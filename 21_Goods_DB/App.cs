@@ -31,7 +31,7 @@ namespace _21_Goods_DB
         {
             DatabaseWorks db = new(connection);
             // Обновлятор таблицы с товарами
-            dataGridViewGoods.DataSource = db.ReturnTable("a.name as Наименование, a.amount as Количество", "Goods.dbo.Good as a", null!);
+            dataGridViewGoods.DataSource = db.ReturnTable("a.id, a.name as Наименование, a.amount as Количество", "Goods.dbo.Good as a", null!);
             db.connection.Close();
         }
 
@@ -41,11 +41,11 @@ namespace _21_Goods_DB
             // Обновлятор таблицы со справочниками
             switch (tabControlDirs.SelectedIndex)
             {
-                case 0: dataGridViewDir.DataSource = db.ReturnTable("a.name AS Наименование", "Goods.dbo.StreetType AS a", null!); break;
-                case 1: dataGridViewDir.DataSource = db.ReturnTable("a.name AS Наименование", "Goods.dbo.LocalityType AS a", null!); break;
-                case 2: dataGridViewDir.DataSource = db.ReturnTable("a.name AS Наименование, b.name AS 'Тип улицы'", "Goods.dbo.Street AS a, Goods.dbo.StreetType AS b", "WHERE a.streetTypeId = b.id"); break;
-                case 3: dataGridViewDir.DataSource = db.ReturnTable("a.name AS Наименование, b.name AS 'Тип улицы'", "Goods.dbo.Locality AS a, Goods.dbo.LocalityType AS b", "WHERE a.localityTypeId = b.id"); break;
-                case 4: dataGridViewDir.DataSource = db.ReturnTable("a.houseNumber as 'Номер дома', a.campus as Корпус, c.name as Улица, b.name as 'Населенный пункт'", "Goods.dbo.Address AS a, Goods.dbo.Locality AS b, Goods.dbo.Street as c", "WHERE a.localityId = b.id AND a.streetId = c.id"); break;
+                case 0: dataGridViewDir.DataSource = db.ReturnTable("a.id, a.name AS Наименование", "Goods.dbo.StreetType AS a", null!); break;
+                case 1: dataGridViewDir.DataSource = db.ReturnTable("a.id, a.name AS Наименование", "Goods.dbo.LocalityType AS a", null!); break;
+                case 2: dataGridViewDir.DataSource = db.ReturnTable("a.id, a.name AS Наименование, b.name AS 'Тип улицы'", "Goods.dbo.Street AS a, Goods.dbo.StreetType AS b", "WHERE a.streetTypeId = b.id"); break;
+                case 3: dataGridViewDir.DataSource = db.ReturnTable("a.id, a.name AS Наименование, b.name AS 'Тип улицы'", "Goods.dbo.Locality AS a, Goods.dbo.LocalityType AS b", "WHERE a.localityTypeId = b.id"); break;
+                case 4: dataGridViewDir.DataSource = db.ReturnTable("a.id, a.houseNumber as 'Номер дома', a.campus as Корпус, c.name as Улица, b.name as 'Населенный пункт'", "Goods.dbo.Address AS a, Goods.dbo.Locality AS b, Goods.dbo.Street as c", "WHERE a.localityId = b.id AND a.streetId = c.id"); break;
             }
             db.connection.Close();
         }
@@ -143,10 +143,10 @@ namespace _21_Goods_DB
             switch (tabControlOrg.SelectedIndex)
             {
                 case 0:
-                    dataGridViewOrg.DataSource = db.ReturnTable("name as Наименование, inn as ИНН, req as Реквизиты, phone as Телефон, email as Эмейл, site as Сайт, predName as 'Имя представителя', predSurname as 'Фамилия представителя'", "Goods.dbo.Organization", null!);
+                    dataGridViewOrg.DataSource = db.ReturnTable("id, name as Наименование, inn as ИНН, req as Реквизиты, phone as Телефон, email as Эмейл, site as Сайт, predName as 'Имя представителя', predSurname as 'Фамилия представителя'", "Goods.dbo.Organization", null!);
                     break;
                 case 1:
-                    dataGridViewOrg.DataSource = db.ReturnTable("c.name as 'Название товара', b.dateReleased as 'Дата выпуска', b.goodDesc as Описание, b.goodPrice as Стоимость", "Goods.dbo.PriceList_Organization as a, Goods.dbo.PriceList as b, Goods.dbo.Good as c", $"WHERE a.organizationId = '{comboBoxPriceListOrg.Text.Split(' ')[0]}' AND b.id = a.priceListId AND b.goodId = c.id");
+                    dataGridViewOrg.DataSource = db.ReturnTable("b.id, c.name as 'Название товара', b.dateReleased as 'Дата выпуска', b.goodDesc as Описание, b.goodPrice as Стоимость", "Goods.dbo.PriceList_Organization as a, Goods.dbo.PriceList as b, Goods.dbo.Good as c", $"WHERE a.organizationId = '{comboBoxPriceListOrg.Text.Split(' ')[0]}' AND b.id = a.priceListId AND b.goodId = c.id");
                     dataGridViewBuffer.DataSource = db.ReturnTable("a.id", "Goods.dbo.PriceList as a", null!);
                     break;
             }
@@ -245,11 +245,11 @@ namespace _21_Goods_DB
             switch (tabControlPhys.SelectedIndex)
             {
                 case 0:
-                    dataGridViewPhys.DataSource = db.ReturnTable("a.series as Серия, a.number as Номер, a.dateIssued as 'Дата выдачи', a.issuerName as 'Кто выпустил'", "Goods.dbo.Passport as a", null!);
+                    dataGridViewPhys.DataSource = db.ReturnTable("a.id, a.series as Серия, a.number as Номер, a.dateIssued as 'Дата выдачи', a.issuerName as 'Кто выпустил'", "Goods.dbo.Passport as a", null!);
                     break;
                 case 1:
                     PhysPassportComboUpdater();
-                    dataGridViewPhys.DataSource = db.ReturnTable("a.name as Имя, a.surname as Фамилия, a.patron as Отчество, a.inn as ИНН, b.series as Серия, b.number as Номер", "Goods.dbo.Phys as a, Goods.dbo.Passport as b", null!);
+                    dataGridViewPhys.DataSource = db.ReturnTable("a.id, a.name as Имя, a.surname as Фамилия, a.patron as Отчество, a.inn as ИНН, b.series as Серия, b.number as Номер", "Goods.dbo.Phys as a, Goods.dbo.Passport as b", null!);
                     break;
             }
             db.connection.Close();
@@ -339,6 +339,56 @@ namespace _21_Goods_DB
         private void comboBoxOrderWhoType_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateOrderWhoCombo(comboBoxOrderWhoType.SelectedIndex);
+        }
+
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+            DatabaseWorks db = new(connection);
+            string[] tables = new string[5]
+            {
+                "Goods.dbo.StreetType",
+                "Goods.dbo.LocalityType",
+                "Goods.dbo.Street",
+                "Goods.dbo.Locality",
+                "Goods.dbo.Address"
+            };
+            db.Delete(dataGridViewDir.SelectedRows[0].Cells[0].Value.ToString()!, tables[tabControlDirs.SelectedIndex]);
+            DirGridUpdater();
+            db.connection.Close();
+        }
+
+        private void buttonDeleteGood_Click(object sender, EventArgs e)
+        {
+            DatabaseWorks db = new(connection);
+            db.Delete(dataGridViewGoods.SelectedRows[0].Cells[0].Value.ToString()!, "Goods.dbo.Good");
+            GoodGridUpdater();
+            db.connection.Close();
+        }
+
+        private void buttonDeleteOrg_Click(object sender, EventArgs e)
+        {
+            DatabaseWorks db = new(connection);
+            string[] tables = new string[2]
+            {
+                "Goods.dbo.Organization",
+                "Goods.dbo.PriceList"
+            };
+            db.Delete(dataGridViewOrg.SelectedRows[0].Cells[0].Value.ToString()!, tables[tabControlOrg.SelectedIndex]);
+            OrgGridUpdater();
+            db.connection.Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DatabaseWorks db = new(connection);
+            string[] tables = new string[2]
+            {
+                "Goods.dbo.Passport",
+                "Goods.dbo.Phys"
+            };
+            db.Delete(dataGridViewPhys.SelectedRows[0].Cells[0].Value.ToString()!, tables[tabControlPhys.SelectedIndex]);
+            PhysGridUpdater();
+            db.connection.Close();
         }
     }
 }

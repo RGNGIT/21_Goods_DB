@@ -30,6 +30,7 @@
         {
             tabControlMain = new TabControl();
             tabPage1 = new TabPage();
+            buttonDeleteDir = new Button();
             dataGridViewDir = new DataGridView();
             buttonAddDir = new Button();
             tabControlDirs = new TabControl();
@@ -59,6 +60,7 @@
             label7 = new Label();
             textBoxHouseNum = new TextBox();
             tabPage2 = new TabPage();
+            buttonDeleteGood = new Button();
             buttonAddGood = new Button();
             label12 = new Label();
             textBoxGoodAmount = new TextBox();
@@ -66,6 +68,7 @@
             textBoxGoodName = new TextBox();
             dataGridViewGoods = new DataGridView();
             tabPage8 = new TabPage();
+            buttonDeleteOrg = new Button();
             buttonAddOrg = new Button();
             tabControlOrg = new TabControl();
             tabPage9 = new TabPage();
@@ -98,6 +101,7 @@
             label21 = new Label();
             dataGridViewOrg = new DataGridView();
             tabPage11 = new TabPage();
+            buttonDeletePhys = new Button();
             buttonAddPhys = new Button();
             tabControlPhys = new TabControl();
             tabPage12 = new TabPage();
@@ -172,6 +176,7 @@
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(buttonDeleteDir);
             tabPage1.Controls.Add(dataGridViewDir);
             tabPage1.Controls.Add(buttonAddDir);
             tabPage1.Controls.Add(tabControlDirs);
@@ -182,6 +187,17 @@
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Справочники";
             tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // buttonDeleteDir
+            // 
+            buttonDeleteDir.ForeColor = Color.Red;
+            buttonDeleteDir.Location = new Point(10, 367);
+            buttonDeleteDir.Name = "buttonDeleteDir";
+            buttonDeleteDir.Size = new Size(309, 23);
+            buttonDeleteDir.TabIndex = 3;
+            buttonDeleteDir.Text = "Удалить";
+            buttonDeleteDir.UseVisualStyleBackColor = true;
+            buttonDeleteDir.Click += buttonDelete_Click;
             // 
             // dataGridViewDir
             // 
@@ -212,7 +228,7 @@
             tabControlDirs.Location = new Point(6, 6);
             tabControlDirs.Name = "tabControlDirs";
             tabControlDirs.SelectedIndex = 0;
-            tabControlDirs.Size = new Size(317, 384);
+            tabControlDirs.Size = new Size(317, 355);
             tabControlDirs.TabIndex = 0;
             tabControlDirs.SelectedIndexChanged += tabControlDirs_SelectedIndexChanged;
             // 
@@ -223,7 +239,7 @@
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
             tabPage3.Padding = new Padding(3);
-            tabPage3.Size = new Size(309, 356);
+            tabPage3.Size = new Size(309, 327);
             tabPage3.TabIndex = 0;
             tabPage3.Text = "Тип улицы";
             tabPage3.UseVisualStyleBackColor = true;
@@ -251,7 +267,7 @@
             tabPage4.Location = new Point(4, 24);
             tabPage4.Name = "tabPage4";
             tabPage4.Padding = new Padding(3);
-            tabPage4.Size = new Size(309, 356);
+            tabPage4.Size = new Size(309, 327);
             tabPage4.TabIndex = 1;
             tabPage4.Text = "Тип НП";
             tabPage4.UseVisualStyleBackColor = true;
@@ -281,7 +297,7 @@
             tabPage5.Location = new Point(4, 24);
             tabPage5.Name = "tabPage5";
             tabPage5.Padding = new Padding(3);
-            tabPage5.Size = new Size(309, 356);
+            tabPage5.Size = new Size(309, 327);
             tabPage5.TabIndex = 2;
             tabPage5.Text = "Улица";
             tabPage5.UseVisualStyleBackColor = true;
@@ -329,7 +345,7 @@
             tabPage6.Location = new Point(4, 24);
             tabPage6.Name = "tabPage6";
             tabPage6.Padding = new Padding(3);
-            tabPage6.Size = new Size(309, 356);
+            tabPage6.Size = new Size(309, 327);
             tabPage6.TabIndex = 3;
             tabPage6.Text = "НП";
             tabPage6.UseVisualStyleBackColor = true;
@@ -381,7 +397,7 @@
             tabPage7.Location = new Point(4, 24);
             tabPage7.Name = "tabPage7";
             tabPage7.Padding = new Padding(3);
-            tabPage7.Size = new Size(309, 356);
+            tabPage7.Size = new Size(309, 327);
             tabPage7.TabIndex = 4;
             tabPage7.Text = "Адрес";
             tabPage7.UseVisualStyleBackColor = true;
@@ -456,6 +472,7 @@
             // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(buttonDeleteGood);
             tabPage2.Controls.Add(buttonAddGood);
             tabPage2.Controls.Add(label12);
             tabPage2.Controls.Add(textBoxGoodAmount);
@@ -469,6 +486,17 @@
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Товары";
             tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // buttonDeleteGood
+            // 
+            buttonDeleteGood.ForeColor = Color.Red;
+            buttonDeleteGood.Location = new Point(3, 367);
+            buttonDeleteGood.Name = "buttonDeleteGood";
+            buttonDeleteGood.Size = new Size(320, 23);
+            buttonDeleteGood.TabIndex = 13;
+            buttonDeleteGood.Text = "Удалить";
+            buttonDeleteGood.UseVisualStyleBackColor = true;
+            buttonDeleteGood.Click += buttonDeleteGood_Click;
             // 
             // buttonAddGood
             // 
@@ -523,6 +551,7 @@
             // 
             // tabPage8
             // 
+            tabPage8.Controls.Add(buttonDeleteOrg);
             tabPage8.Controls.Add(buttonAddOrg);
             tabPage8.Controls.Add(tabControlOrg);
             tabPage8.Controls.Add(dataGridViewOrg);
@@ -534,11 +563,22 @@
             tabPage8.Text = "Организации";
             tabPage8.UseVisualStyleBackColor = true;
             // 
+            // buttonDeleteOrg
+            // 
+            buttonDeleteOrg.ForeColor = Color.Red;
+            buttonDeleteOrg.Location = new Point(165, 396);
+            buttonDeleteOrg.Name = "buttonDeleteOrg";
+            buttonDeleteOrg.Size = new Size(158, 23);
+            buttonDeleteOrg.TabIndex = 7;
+            buttonDeleteOrg.Text = "Удалить";
+            buttonDeleteOrg.UseVisualStyleBackColor = true;
+            buttonDeleteOrg.Click += buttonDeleteOrg_Click;
+            // 
             // buttonAddOrg
             // 
             buttonAddOrg.Location = new Point(8, 396);
             buttonAddOrg.Name = "buttonAddOrg";
-            buttonAddOrg.Size = new Size(311, 23);
+            buttonAddOrg.Size = new Size(158, 23);
             buttonAddOrg.TabIndex = 6;
             buttonAddOrg.Text = "Добавить";
             buttonAddOrg.UseVisualStyleBackColor = true;
@@ -828,6 +868,7 @@
             // 
             // tabPage11
             // 
+            tabPage11.Controls.Add(buttonDeletePhys);
             tabPage11.Controls.Add(buttonAddPhys);
             tabPage11.Controls.Add(tabControlPhys);
             tabPage11.Controls.Add(dataGridViewPhys);
@@ -838,6 +879,17 @@
             tabPage11.TabIndex = 3;
             tabPage11.Text = "Физ. Лицо";
             tabPage11.UseVisualStyleBackColor = true;
+            // 
+            // buttonDeletePhys
+            // 
+            buttonDeletePhys.ForeColor = Color.Red;
+            buttonDeletePhys.Location = new Point(8, 367);
+            buttonDeletePhys.Name = "buttonDeletePhys";
+            buttonDeletePhys.Size = new Size(309, 23);
+            buttonDeletePhys.TabIndex = 14;
+            buttonDeletePhys.Text = "Удалить";
+            buttonDeletePhys.UseVisualStyleBackColor = true;
+            buttonDeletePhys.Click += button1_Click;
             // 
             // buttonAddPhys
             // 
@@ -856,7 +908,7 @@
             tabControlPhys.Location = new Point(8, 6);
             tabControlPhys.Name = "tabControlPhys";
             tabControlPhys.SelectedIndex = 0;
-            tabControlPhys.Size = new Size(315, 384);
+            tabControlPhys.Size = new Size(315, 355);
             tabControlPhys.TabIndex = 6;
             tabControlPhys.SelectedIndexChanged += tabControlPhys_SelectedIndexChanged;
             // 
@@ -873,7 +925,7 @@
             tabPage12.Location = new Point(4, 24);
             tabPage12.Name = "tabPage12";
             tabPage12.Padding = new Padding(3);
-            tabPage12.Size = new Size(307, 356);
+            tabPage12.Size = new Size(307, 327);
             tabPage12.TabIndex = 0;
             tabPage12.Text = "Паспорт";
             tabPage12.UseVisualStyleBackColor = true;
@@ -953,7 +1005,7 @@
             tabPage13.Location = new Point(4, 24);
             tabPage13.Name = "tabPage13";
             tabPage13.Padding = new Padding(3);
-            tabPage13.Size = new Size(307, 356);
+            tabPage13.Size = new Size(307, 327);
             tabPage13.TabIndex = 1;
             tabPage13.Text = "Физ. Лицо";
             tabPage13.UseVisualStyleBackColor = true;
@@ -1296,5 +1348,9 @@
         private Label label34;
         private DateTimePicker dateTimePickerOrderDate;
         private ComboBox comboBoxOrderWho;
+        private Button buttonDeleteDir;
+        private Button buttonDeleteGood;
+        private Button buttonDeleteOrg;
+        private Button buttonDeletePhys;
     }
 }
