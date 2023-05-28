@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             tabControlMain = new TabControl();
             tabPage1 = new TabPage();
             buttonDeleteDir = new Button();
@@ -132,7 +135,33 @@
             comboBoxOrderWhoType = new ComboBox();
             label33 = new Label();
             buttonAddOrder = new Button();
-            dataGridView1 = new DataGridView();
+            dataGridViewOrders = new DataGridView();
+            tabPage15 = new TabPage();
+            tabControlTZ = new TabControl();
+            tabPage16 = new TabPage();
+            dataGridViewTZ1Org = new DataGridView();
+            comboBoxTZ1Goods = new ComboBox();
+            label39 = new Label();
+            label38 = new Label();
+            dateTimePickerTZ1To = new DateTimePicker();
+            label37 = new Label();
+            dateTimePickerTZ1From = new DateTimePicker();
+            dataGridViewTZ1Phys = new DataGridView();
+            tabPage17 = new TabPage();
+            dataGridViewTZ2 = new DataGridView();
+            label40 = new Label();
+            dateTimePickerTZ2To = new DateTimePicker();
+            label41 = new Label();
+            dateTimePickerTZ2From = new DateTimePicker();
+            tabPage18 = new TabPage();
+            label43 = new Label();
+            dateTimePickerTZ3To = new DateTimePicker();
+            label44 = new Label();
+            dateTimePickerTZ3From = new DateTimePicker();
+            chartTZ3 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            dataGridViewTZ3 = new DataGridView();
+            comboBoxTZ3 = new ComboBox();
+            label42 = new Label();
             dataGridViewBuffer = new DataGridView();
             tabControlMain.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -156,7 +185,17 @@
             tabPage13.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPhys).BeginInit();
             tabPage14.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewOrders).BeginInit();
+            tabPage15.SuspendLayout();
+            tabControlTZ.SuspendLayout();
+            tabPage16.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTZ1Org).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTZ1Phys).BeginInit();
+            tabPage17.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTZ2).BeginInit();
+            tabPage18.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)chartTZ3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTZ3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewBuffer).BeginInit();
             SuspendLayout();
             // 
@@ -167,6 +206,7 @@
             tabControlMain.Controls.Add(tabPage8);
             tabControlMain.Controls.Add(tabPage11);
             tabControlMain.Controls.Add(tabPage14);
+            tabControlMain.Controls.Add(tabPage15);
             tabControlMain.Location = new Point(0, 0);
             tabControlMain.Name = "tabControlMain";
             tabControlMain.SelectedIndex = 0;
@@ -1081,7 +1121,7 @@
             tabPage14.Controls.Add(comboBoxOrderWhoType);
             tabPage14.Controls.Add(label33);
             tabPage14.Controls.Add(buttonAddOrder);
-            tabPage14.Controls.Add(dataGridView1);
+            tabPage14.Controls.Add(dataGridViewOrders);
             tabPage14.Location = new Point(4, 24);
             tabPage14.Name = "tabPage14";
             tabPage14.Padding = new Padding(3);
@@ -1098,6 +1138,7 @@
             comboBoxOrderWho.Name = "comboBoxOrderWho";
             comboBoxOrderWho.Size = new Size(320, 23);
             comboBoxOrderWho.TabIndex = 27;
+            comboBoxOrderWho.SelectedIndexChanged += comboBoxOrderWho_SelectedIndexChanged;
             // 
             // label36
             // 
@@ -1179,14 +1220,276 @@
             buttonAddOrder.UseVisualStyleBackColor = true;
             buttonAddOrder.Click += buttonAddOrder_Click;
             // 
-            // dataGridView1
+            // dataGridViewOrders
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(329, 6);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(512, 413);
-            dataGridView1.TabIndex = 6;
+            dataGridViewOrders.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewOrders.Location = new Point(329, 6);
+            dataGridViewOrders.Name = "dataGridViewOrders";
+            dataGridViewOrders.RowTemplate.Height = 25;
+            dataGridViewOrders.Size = new Size(512, 413);
+            dataGridViewOrders.TabIndex = 6;
+            // 
+            // tabPage15
+            // 
+            tabPage15.Controls.Add(tabControlTZ);
+            tabPage15.Location = new Point(4, 24);
+            tabPage15.Name = "tabPage15";
+            tabPage15.Padding = new Padding(3);
+            tabPage15.Size = new Size(847, 425);
+            tabPage15.TabIndex = 5;
+            tabPage15.Text = "Отчеты";
+            tabPage15.UseVisualStyleBackColor = true;
+            // 
+            // tabControlTZ
+            // 
+            tabControlTZ.Controls.Add(tabPage16);
+            tabControlTZ.Controls.Add(tabPage17);
+            tabControlTZ.Controls.Add(tabPage18);
+            tabControlTZ.Location = new Point(3, 6);
+            tabControlTZ.Name = "tabControlTZ";
+            tabControlTZ.SelectedIndex = 0;
+            tabControlTZ.Size = new Size(838, 416);
+            tabControlTZ.TabIndex = 0;
+            tabControlTZ.SelectedIndexChanged += tabControlTZ_SelectedIndexChanged;
+            // 
+            // tabPage16
+            // 
+            tabPage16.Controls.Add(dataGridViewTZ1Org);
+            tabPage16.Controls.Add(comboBoxTZ1Goods);
+            tabPage16.Controls.Add(label39);
+            tabPage16.Controls.Add(label38);
+            tabPage16.Controls.Add(dateTimePickerTZ1To);
+            tabPage16.Controls.Add(label37);
+            tabPage16.Controls.Add(dateTimePickerTZ1From);
+            tabPage16.Controls.Add(dataGridViewTZ1Phys);
+            tabPage16.Location = new Point(4, 24);
+            tabPage16.Name = "tabPage16";
+            tabPage16.Padding = new Padding(3);
+            tabPage16.Size = new Size(830, 388);
+            tabPage16.TabIndex = 0;
+            tabPage16.Text = "ТЗ1";
+            tabPage16.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewTZ1Org
+            // 
+            dataGridViewTZ1Org.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewTZ1Org.Location = new Point(316, 196);
+            dataGridViewTZ1Org.Name = "dataGridViewTZ1Org";
+            dataGridViewTZ1Org.RowTemplate.Height = 25;
+            dataGridViewTZ1Org.Size = new Size(508, 186);
+            dataGridViewTZ1Org.TabIndex = 27;
+            // 
+            // comboBoxTZ1Goods
+            // 
+            comboBoxTZ1Goods.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxTZ1Goods.FormattingEnabled = true;
+            comboBoxTZ1Goods.Location = new Point(6, 107);
+            comboBoxTZ1Goods.Name = "comboBoxTZ1Goods";
+            comboBoxTZ1Goods.Size = new Size(304, 23);
+            comboBoxTZ1Goods.TabIndex = 26;
+            comboBoxTZ1Goods.SelectedIndexChanged += comboBoxTZ1Goods_SelectedIndexChanged;
+            // 
+            // label39
+            // 
+            label39.AutoSize = true;
+            label39.Location = new Point(6, 89);
+            label39.Name = "label39";
+            label39.Size = new Size(39, 15);
+            label39.TabIndex = 25;
+            label39.Text = "Товар";
+            // 
+            // label38
+            // 
+            label38.AutoSize = true;
+            label38.Location = new Point(3, 45);
+            label38.Name = "label38";
+            label38.Size = new Size(22, 15);
+            label38.TabIndex = 24;
+            label38.Text = "До";
+            // 
+            // dateTimePickerTZ1To
+            // 
+            dateTimePickerTZ1To.Location = new Point(6, 63);
+            dateTimePickerTZ1To.Name = "dateTimePickerTZ1To";
+            dateTimePickerTZ1To.Size = new Size(304, 23);
+            dateTimePickerTZ1To.TabIndex = 23;
+            // 
+            // label37
+            // 
+            label37.AutoSize = true;
+            label37.Location = new Point(3, 3);
+            label37.Name = "label37";
+            label37.Size = new Size(21, 15);
+            label37.TabIndex = 22;
+            label37.Text = "От";
+            // 
+            // dateTimePickerTZ1From
+            // 
+            dateTimePickerTZ1From.Location = new Point(6, 21);
+            dateTimePickerTZ1From.Name = "dateTimePickerTZ1From";
+            dateTimePickerTZ1From.Size = new Size(304, 23);
+            dateTimePickerTZ1From.TabIndex = 21;
+            // 
+            // dataGridViewTZ1Phys
+            // 
+            dataGridViewTZ1Phys.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewTZ1Phys.Location = new Point(316, 6);
+            dataGridViewTZ1Phys.Name = "dataGridViewTZ1Phys";
+            dataGridViewTZ1Phys.RowTemplate.Height = 25;
+            dataGridViewTZ1Phys.Size = new Size(508, 186);
+            dataGridViewTZ1Phys.TabIndex = 7;
+            // 
+            // tabPage17
+            // 
+            tabPage17.Controls.Add(dataGridViewTZ2);
+            tabPage17.Controls.Add(label40);
+            tabPage17.Controls.Add(dateTimePickerTZ2To);
+            tabPage17.Controls.Add(label41);
+            tabPage17.Controls.Add(dateTimePickerTZ2From);
+            tabPage17.Location = new Point(4, 24);
+            tabPage17.Name = "tabPage17";
+            tabPage17.Padding = new Padding(3);
+            tabPage17.Size = new Size(830, 388);
+            tabPage17.TabIndex = 1;
+            tabPage17.Text = "ТЗ2";
+            tabPage17.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewTZ2
+            // 
+            dataGridViewTZ2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewTZ2.Location = new Point(316, 6);
+            dataGridViewTZ2.Name = "dataGridViewTZ2";
+            dataGridViewTZ2.RowTemplate.Height = 25;
+            dataGridViewTZ2.Size = new Size(508, 376);
+            dataGridViewTZ2.TabIndex = 29;
+            // 
+            // label40
+            // 
+            label40.AutoSize = true;
+            label40.Location = new Point(3, 45);
+            label40.Name = "label40";
+            label40.Size = new Size(22, 15);
+            label40.TabIndex = 28;
+            label40.Text = "До";
+            // 
+            // dateTimePickerTZ2To
+            // 
+            dateTimePickerTZ2To.Location = new Point(6, 63);
+            dateTimePickerTZ2To.Name = "dateTimePickerTZ2To";
+            dateTimePickerTZ2To.Size = new Size(304, 23);
+            dateTimePickerTZ2To.TabIndex = 27;
+            dateTimePickerTZ2To.ValueChanged += dateTimePickerTZ2To_ValueChanged;
+            // 
+            // label41
+            // 
+            label41.AutoSize = true;
+            label41.Location = new Point(3, 3);
+            label41.Name = "label41";
+            label41.Size = new Size(21, 15);
+            label41.TabIndex = 26;
+            label41.Text = "От";
+            // 
+            // dateTimePickerTZ2From
+            // 
+            dateTimePickerTZ2From.Location = new Point(6, 21);
+            dateTimePickerTZ2From.Name = "dateTimePickerTZ2From";
+            dateTimePickerTZ2From.Size = new Size(304, 23);
+            dateTimePickerTZ2From.TabIndex = 25;
+            dateTimePickerTZ2From.ValueChanged += dateTimePickerTZ2From_ValueChanged;
+            // 
+            // tabPage18
+            // 
+            tabPage18.Controls.Add(label43);
+            tabPage18.Controls.Add(dateTimePickerTZ3To);
+            tabPage18.Controls.Add(label44);
+            tabPage18.Controls.Add(dateTimePickerTZ3From);
+            tabPage18.Controls.Add(chartTZ3);
+            tabPage18.Controls.Add(dataGridViewTZ3);
+            tabPage18.Controls.Add(comboBoxTZ3);
+            tabPage18.Controls.Add(label42);
+            tabPage18.Location = new Point(4, 24);
+            tabPage18.Name = "tabPage18";
+            tabPage18.Padding = new Padding(3);
+            tabPage18.Size = new Size(830, 388);
+            tabPage18.TabIndex = 2;
+            tabPage18.Text = "ТЗ3";
+            tabPage18.UseVisualStyleBackColor = true;
+            // 
+            // label43
+            // 
+            label43.AutoSize = true;
+            label43.Location = new Point(3, 89);
+            label43.Name = "label43";
+            label43.Size = new Size(22, 15);
+            label43.TabIndex = 35;
+            label43.Text = "До";
+            // 
+            // dateTimePickerTZ3To
+            // 
+            dateTimePickerTZ3To.Location = new Point(6, 107);
+            dateTimePickerTZ3To.Name = "dateTimePickerTZ3To";
+            dateTimePickerTZ3To.Size = new Size(304, 23);
+            dateTimePickerTZ3To.TabIndex = 34;
+            // 
+            // label44
+            // 
+            label44.AutoSize = true;
+            label44.Location = new Point(3, 47);
+            label44.Name = "label44";
+            label44.Size = new Size(21, 15);
+            label44.TabIndex = 33;
+            label44.Text = "От";
+            // 
+            // dateTimePickerTZ3From
+            // 
+            dateTimePickerTZ3From.Location = new Point(6, 65);
+            dateTimePickerTZ3From.Name = "dateTimePickerTZ3From";
+            dateTimePickerTZ3From.Size = new Size(304, 23);
+            dateTimePickerTZ3From.TabIndex = 32;
+            // 
+            // chartTZ3
+            // 
+            chartArea1.Name = "ChartArea1";
+            chartTZ3.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            chartTZ3.Legends.Add(legend1);
+            chartTZ3.Location = new Point(316, 6);
+            chartTZ3.Name = "chartTZ3";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            chartTZ3.Series.Add(series1);
+            chartTZ3.Size = new Size(508, 226);
+            chartTZ3.TabIndex = 31;
+            chartTZ3.Text = "chartTZ1";
+            // 
+            // dataGridViewTZ3
+            // 
+            dataGridViewTZ3.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewTZ3.Location = new Point(316, 238);
+            dataGridViewTZ3.Name = "dataGridViewTZ3";
+            dataGridViewTZ3.RowTemplate.Height = 25;
+            dataGridViewTZ3.Size = new Size(508, 144);
+            dataGridViewTZ3.TabIndex = 30;
+            // 
+            // comboBoxTZ3
+            // 
+            comboBoxTZ3.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxTZ3.FormattingEnabled = true;
+            comboBoxTZ3.Location = new Point(3, 21);
+            comboBoxTZ3.Name = "comboBoxTZ3";
+            comboBoxTZ3.Size = new Size(307, 23);
+            comboBoxTZ3.TabIndex = 25;
+            comboBoxTZ3.SelectedIndexChanged += comboBoxTZ3_SelectedIndexChanged;
+            // 
+            // label42
+            // 
+            label42.AutoSize = true;
+            label42.Location = new Point(3, 3);
+            label42.Name = "label42";
+            label42.Size = new Size(39, 15);
+            label42.TabIndex = 24;
+            label42.Text = "Товар";
             // 
             // dataGridViewBuffer
             // 
@@ -1239,7 +1542,20 @@
             ((System.ComponentModel.ISupportInitialize)dataGridViewPhys).EndInit();
             tabPage14.ResumeLayout(false);
             tabPage14.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewOrders).EndInit();
+            tabPage15.ResumeLayout(false);
+            tabControlTZ.ResumeLayout(false);
+            tabPage16.ResumeLayout(false);
+            tabPage16.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTZ1Org).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTZ1Phys).EndInit();
+            tabPage17.ResumeLayout(false);
+            tabPage17.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTZ2).EndInit();
+            tabPage18.ResumeLayout(false);
+            tabPage18.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)chartTZ3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTZ3).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewBuffer).EndInit();
             ResumeLayout(false);
         }
@@ -1337,7 +1653,7 @@
         private ComboBox comboBoxPhysPassport;
         private Label label32;
         private TabPage tabPage14;
-        private DataGridView dataGridView1;
+        private DataGridView dataGridViewOrders;
         private ComboBox comboBoxOrderWhoType;
         private Label label33;
         private Button buttonAddOrder;
@@ -1352,5 +1668,31 @@
         private Button buttonDeleteGood;
         private Button buttonDeleteOrg;
         private Button buttonDeletePhys;
+        private TabPage tabPage15;
+        private TabControl tabControlTZ;
+        private TabPage tabPage16;
+        private TabPage tabPage17;
+        private TabPage tabPage18;
+        private ComboBox comboBoxTZ1Goods;
+        private Label label39;
+        private Label label38;
+        private DateTimePicker dateTimePickerTZ1To;
+        private Label label37;
+        private DateTimePicker dateTimePickerTZ1From;
+        private DataGridView dataGridViewTZ1Phys;
+        private DataGridView dataGridViewTZ1Org;
+        private DataGridView dataGridViewTZ2;
+        private Label label40;
+        private DateTimePicker dateTimePickerTZ2To;
+        private Label label41;
+        private DateTimePicker dateTimePickerTZ2From;
+        private DataGridView dataGridViewTZ3;
+        private ComboBox comboBoxTZ3;
+        private Label label42;
+        private Label label43;
+        private DateTimePicker dateTimePickerTZ3To;
+        private Label label44;
+        private DateTimePicker dateTimePickerTZ3From;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartTZ3;
     }
 }

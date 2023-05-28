@@ -1,3 +1,5 @@
+using System.Windows.Forms.DataVisualization.Charting;
+
 namespace _21_Goods_DB
 {
     public partial class App : Form
@@ -7,6 +9,7 @@ namespace _21_Goods_DB
             // Ничего интересного, запуск проги и обновление первого грида со справками
             InitializeComponent();
             DirGridUpdater();
+            chartTZ3.Series.Clear();
         }
         // Твоя строка подключения, сейчас здесь моя, надо будет поменять
         string connection = "Server=AORUS;Integrated Security=true;";
@@ -86,8 +89,39 @@ namespace _21_Goods_DB
                 case 4:
                     UpdateOrderGoodCombo();
                     break;
+                case 5:
+                    TZUpdaters();
+                    break;
             }
         }
+
+        void UpdateTZ1GoodCombo()
+        {
+            DatabaseWorks db = new(connection);
+            comboBoxTZ1Goods.Items.Clear();
+            dataGridViewBuffer.DataSource = db.ReturnTable("a.id, a.name as Наименование", "Goods.dbo.Good as a", null!);
+            for (int i = 0; i < dataGridViewBuffer.Rows.Count - 1; i++)
+            {
+                comboBoxTZ1Goods.Items.Add($"{dataGridViewBuffer.Rows[i].Cells[0].Value} {dataGridViewBuffer.Rows[i].Cells[1].Value}");
+            }
+            db.connection.Close();
+        }
+
+        void TZUpdaters()
+        {
+            switch (tabControlTZ.SelectedIndex)
+            {
+                case 0:
+                    UpdateTZ1GoodCombo();
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    UpdateTZ3Combo();
+                    break;
+            }
+        }
+
         // Обновлятор
         void StreetTypeComboUpdater()
         {
@@ -274,7 +308,7 @@ namespace _21_Goods_DB
             switch (type)
             {
                 case 0:
-                    dataGridViewBuffer.DataSource = db.ReturnTable("a.id, a.surname, a.name, a.name", "Goods.dbo.Phys as a", null!);
+                    dataGridViewBuffer.DataSource = db.ReturnTable("a.id, a.surname, a.name, a.patron", "Goods.dbo.Phys as a", null!);
                     for (int i = 0; i < dataGridViewBuffer.Rows.Count - 1; i++)
                     {
                         comboBoxOrderWho.Items.Add($"{dataGridViewBuffer.Rows[i].Cells[0].Value} {dataGridViewBuffer.Rows[i].Cells[1].Value} {dataGridViewBuffer.Rows[i].Cells[2].Value} {dataGridViewBuffer.Rows[i].Cells[3].Value}");
@@ -302,7 +336,7 @@ namespace _21_Goods_DB
             );
             for (int i = 0; i < dataGridViewBuffer.Rows.Count - 1; i++)
             {
-                comboBoxOrderGood.Items.Add($"{dataGridViewBuffer.Rows[i].Cells[0].Value} {dataGridViewBuffer.Rows[i].Cells[1].Value}. Предлагает \"{dataGridViewBuffer.Rows[i].Cells[2].Value}\" за {dataGridViewBuffer.Rows[i].Cells[3].Value}p.");
+                comboBoxOrderGood.Items.Add($"{dataGridViewBuffer.Rows[i].Cells[0].Value} {dataGridViewBuffer.Rows[i].Cells[1].Value}. Предлагает \"{dataGridViewBuffer.Rows[i].Cells[2].Value}\" за '{dataGridViewBuffer.Rows[i].Cells[3].Value}'p.");
             }
             db.connection.Close();
         }
@@ -331,9 +365,67 @@ namespace _21_Goods_DB
             PhysGridUpdater();
         }
 
+        int GenerateNumber()
+        {
+            Random rnd = new Random();
+            return rnd.Next(0, 9999999);
+        }
+
+        void UpdateOrderGridPhys(string UnitId)
+        {
+            DatabaseWorks db = new(connection);
+            dataGridViewOrders.DataSource = db.ReturnTable(
+                "a.date as 'Дата заказа', a.sum as 'Сумма заказа', a.number as 'Номер заказа', a.amount as 'Количество', b.name as 'Товар'",
+                "Goods.dbo.[Order] as a, Goods.dbo.Good as b",
+                $"WHERE a.goodId = b.id AND a.physId = {UnitId}"
+            );
+            db.connection.Close();
+        }
+
+        void UpdateOrderGridOrg(string UnitId)
+        {
+            DatabaseWorks db = new(connection);
+            dataGridViewOrders.DataSource = db.ReturnTable(
+                "a.date as 'Дата заказа', a.sum as 'Сумма заказа', a.number as 'Номер заказа', a.amount as 'Количество', b.name as 'Товар'",
+                "Goods.dbo.[Order] as a, Goods.dbo.Good as b",
+                $"WHERE a.goodId = b.id AND a.organizationId = {UnitId}"
+            );
+            db.connection.Close();
+        }
+
         private void buttonAddOrder_Click(object sender, EventArgs e)
         {
-
+            DatabaseWorks db = new(connection);
+            switch (comboBoxOrderWhoType.SelectedIndex)
+            {
+                case 0:
+                    MessageBox.Show(db.AddOrder(
+                        dateTimePickerOrderDate.Value.ToString("dd/MM/yyyy"),
+                        (double.Parse(comboBoxOrderGood.Text.Split("'")[comboBoxOrderGood.Text.Split("'").Length - 2]) * int.Parse(textBoxOrderAmount.Text)).ToString(),
+                        GenerateNumber().ToString(),
+                        textBoxOrderAmount.Text,
+                        dateTimePickerOrderDate.Value.ToString("dd/MM/yyyy"),
+                        comboBoxOrderGood.Text.Split(" ")[0],
+                        comboBoxOrderWho.Text.Split(" ")[0],
+                        "NULL"
+                        ));
+                    UpdateOrderGridPhys(comboBoxOrderWho.Text.Split(" ")[0]);
+                    break;
+                case 1:
+                    db.AddOrder(
+                        dateTimePickerOrderDate.Value.ToString("dd/MM/yyyy"),
+                        (double.Parse(comboBoxOrderGood.Text.Split("'")[comboBoxOrderGood.Text.Split("'").Length - 2]) * int.Parse(textBoxOrderAmount.Text)).ToString(),
+                        GenerateNumber().ToString(),
+                        textBoxOrderAmount.Text,
+                        dateTimePickerOrderDate.Value.ToString("dd/MM/yyyy"),
+                        comboBoxOrderGood.Text.Split(" ")[0],
+                        "NULL",
+                        comboBoxOrderWho.Text.Split(" ")[0]
+                        );
+                    UpdateOrderGridOrg(comboBoxOrderWho.Text.Split(" ")[0]);
+                    break;
+            }
+            db.connection.Close();
         }
         // Вызов обновлятора
         private void comboBoxOrderWhoType_SelectedIndexChanged(object sender, EventArgs e)
@@ -389,6 +481,97 @@ namespace _21_Goods_DB
             db.Delete(dataGridViewPhys.SelectedRows[0].Cells[0].Value.ToString()!, tables[tabControlPhys.SelectedIndex]);
             PhysGridUpdater();
             db.connection.Close();
+        }
+
+        private void comboBoxOrderWho_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (comboBoxOrderWhoType.SelectedIndex)
+            {
+                case 0:
+                    UpdateOrderGridPhys(comboBoxOrderWho.Text.Split(" ")[0]);
+                    break;
+                case 1:
+                    UpdateOrderGridOrg(comboBoxOrderWho.Text.Split(" ")[0]);
+                    break;
+            }
+        }
+
+        private void comboBoxTZ1Goods_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DatabaseWorks db = new(connection);
+            dataGridViewTZ1Phys.DataSource = db.ReturnTable("b.name as 'Имя', b.surname as 'Фамилия', b.patron as 'Отчество', b.inn as 'ИНН'", $"Goods.dbo.[Order] as a, Goods.dbo.Phys as b", $"WHERE a.physId = b.id AND a.goodId = {comboBoxTZ1Goods.Text.Split(' ')[0]}");
+            dataGridViewTZ1Org.DataSource = db.ReturnTable("b.name as 'Наименование', b.inn as 'ИНН'", $"Goods.dbo.[Order] as a, Goods.dbo.Organization as b", $"WHERE a.organizationId = b.id AND a.goodId = {comboBoxTZ1Goods.Text.Split(' ')[0]}");
+            db.connection.Close();
+        }
+
+        void UpdateTZ3Combo()
+        {
+            DatabaseWorks db = new(connection);
+            comboBoxTZ3.Items.Clear();
+            dataGridViewBuffer.DataSource = db.ReturnTable("*", "Goods.dbo.Good", null!);
+            for (int i = 0; i < dataGridViewBuffer.Rows.Count - 1; i++)
+            {
+                comboBoxTZ3.Items.Add($"{dataGridViewBuffer.Rows[i].Cells[0].Value} {dataGridViewBuffer.Rows[i].Cells[1].Value}");
+            }
+            db.connection.Close();
+        }
+
+        void UpdateTZ2Grid()
+        {
+            DatabaseWorks db = new(connection);
+            dataGridViewTZ2.DataSource = db.ReturnTable(
+                "a.name as Наименование, b.goodPrice as 'Стоимость'",
+                "Goods.dbo.Good as a, Goods.dbo.PriceList as b",
+                $"WHERE b.dateReleased BETWEEN '{dateTimePickerTZ2From.Value.ToString("dd/MM/yyyy")}' AND '{dateTimePickerTZ2To.Value.ToString("dd/MM/yyyy")}' AND b.goodId = a.id"
+                );
+            db.connection.Close();
+        }
+
+        private void dateTimePickerTZ2From_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateTZ2Grid();
+        }
+
+        private void dateTimePickerTZ2To_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateTZ2Grid();
+        }
+
+        private void tabControlTZ_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TZUpdaters();
+        }
+
+        void UpdateTZ3Chart()
+        {
+            chartTZ3.Series.Clear();
+            int counter = 0;
+            chartTZ3.Series.Add(new Series("Динамика стоимости")
+            {
+                ChartType = SeriesChartType.Spline,
+                BorderWidth = 3
+            });
+            for (int i = 0; i < dataGridViewTZ3.Rows.Count - 1; i++)
+            {
+                chartTZ3.Series["Динамика стоимости"].Points.AddXY(++counter, float.Parse(dataGridViewTZ3.Rows[i].Cells[3].Value.ToString()!));
+            }
+        }
+
+        void UpdateTZ3Grid()
+        {
+            DatabaseWorks db = new(connection);
+            dataGridViewTZ3.DataSource = db.ReturnTable(
+                "a.name as Наименование, b.dateReleased as 'Дата объявления', d.name as 'Организация', b.goodPrice as 'Стоимость'",
+                "Goods.dbo.Good as a, Goods.dbo.PriceList as b, Goods.dbo.PriceList_Organization as c, Goods.dbo.Organization as d",
+                $"WHERE b.dateReleased BETWEEN '{dateTimePickerTZ2From.Value.ToString("dd/MM/yyyy")}' AND '{dateTimePickerTZ2To.Value.ToString("dd/MM/yyyy")}' AND b.goodId = {comboBoxTZ3.Text.Split(' ')[0]} AND a.id = {comboBoxTZ3.Text.Split(' ')[0]} AND c.organizationId = d.id AND c.priceListId = b.id"
+                );
+            UpdateTZ3Chart();
+            db.connection.Close();
+        }
+
+        private void comboBoxTZ3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateTZ3Grid();
         }
     }
 }

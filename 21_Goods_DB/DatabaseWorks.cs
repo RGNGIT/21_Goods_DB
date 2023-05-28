@@ -179,5 +179,18 @@ namespace _21_Goods_DB
             }
         }
 
+        public string AddOrder(string Date, string Sum, string Number, string Amount, string DateClosed, string GoodId, string PhysId, string OrganizationId)
+        {
+            try
+            {
+                SqlCommand command = new SqlCommand($"INSERT INTO Goods.dbo.[Order] (date, sum, number, amount, dateClosed, goodId, physId, organizationId) VALUES ('{Date}', '{Sum}', '{Number}', '{Amount}', '{DateClosed}', '{GoodId}', {PhysId}, {OrganizationId});", connection);
+                return $"Команда выполнена. Задействовано строк таблицы: {command.ExecuteNonQuery()}";
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+        }
+
     }
 }
